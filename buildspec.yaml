@@ -1,0 +1,72 @@
+# https://docs.aws.amazon.com/codepipeline/latest/userguide/ecs-cd-pipeline.html
+# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: us-east-1 # checkfor specific region
+    AWS_ACCOUNT_ID: 708995052028
+    IMAGE_NAME: aws-pipeline-web-app
+    
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12  
+    commands:
+      # - echo Installing Mocha...
+      # - npm install -g mocha (test)
+  pre_build:
+    commands:
+      - echo  Installing   source NPM dependencies...
+      - npm install
+      # - npm install  unit.js
+      - echo Setting up docker
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com     
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the Node.js code
+      # - mocha test.js
+  post_build:
+    commands:
+      - docker image build -t $IMAGE_NAME .
+      - docker image tag $IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
+      - echo image name =  $IMAGE_NAME:latest
+      - echo image url = $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME:latest
+      - echo Writing image definitions file...
+      - printf '{"ImageURI":"'"$AWS_ACCOUNT_ID"'.dkr.ecr.'"$AWS_REGION"'.amazonaws.com/'"$IMAGE_NAME"':latest"}]' > imageDetail.json
+      - cat imageDetail.json
+      - echo Build completed on `date`
+artifacts:
+  files: 
+    - 'image*.json'
+    - 'appspec.yaml'
+    - 'taskdef.json'
+  secondary-artifacts:
+    DefinitionArtifact:
+      files:
+        - appspec.yaml
+        - taskdef.json
+    ImageArtifact:
+      files:
+        - imageDetail.json
+
+      # printf "Are you sure you want $var lrus: "
+      # - printf '[{"name":"aws-pipeline-web-app","imageUri":"708995052028.dkr.ecr.us-east-1.amazonaws.com/aws-pipeline-web-app:latest"}]' > imagedefinitions.json
+# Include only the files required for your application to run.
+# Do not use recursively include artifacts from node_modules directory as it will include unnecessary packages 
+# used only for building and testing.
+# ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
+# artifacts:
+#   files:
+#     # - imagedefinitions.json
+#     - imageDetail.json
+#     # - app.js
+#     # - package.json
+#     # - node_modules/async/*
+#     # - node_modules/lodash/*
