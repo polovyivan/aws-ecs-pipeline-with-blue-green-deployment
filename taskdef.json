@@ -46,18 +46,18 @@
             "dockerLabels": null,
             "systemControls": null,
             "privileged": null,
-            "name": "aws-pipeline-web-app-container"
+            "name": "ecs-rolling-update-container"
         }
     ],
     "placementConstraints": [],
-    "memory": "200",
+    "memory": "150",
     "taskRoleArn": "arn:aws:iam::708995052028:role/ecsTaskExecutionRole",
     "compatibilities": [
         "EXTERNAL",
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:708995052028:task-definition/aws-pipeline-web-app-task:3",
-    "family": "aws-pipeline-web-app-task",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:708995052028:task-definition/rolling-update-task:9",
+    "family": "rolling-update-task",
     "requiresAttributes": [
         {
             "targetId": null,
@@ -83,8 +83,8 @@
         "EC2"
     ],
     "networkMode": null,
-    "cpu": "300",
-    "revision": 3,
+    "cpu": "200",
+    "revision": 9,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,

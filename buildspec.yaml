@@ -5,8 +5,7 @@ version: 0.2
 env:
   variables:
     AWS_REGION: us-east-1 # checkfor specific region
-    AWS_ACCOUNT_ID: 708995052028
-    IMAGE_NAME: ecs-rolling-update-container
+    IMAGE_NAME: aws-pipeline-with-ecs-rolling-update-deployment-image
     
 phases:
   install:
