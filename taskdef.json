@@ -46,7 +46,7 @@
             "dockerLabels": null,
             "systemControls": null,
             "privileged": null,
-            "name": "ecs-rolling-update-container"
+            "name": "ecs-blue-green-update-container"
         }
     ],
     "placementConstraints": [],
@@ -56,8 +56,8 @@
         "EXTERNAL",
         "EC2"
     ],
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:708995052028:task-definition/rolling-update-task:9",
-    "family": "rolling-update-task",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:708995052028:task-definition/ecs-td-blue-green:1",
+    "family": "ecs-td-blue-green",
     "requiresAttributes": [
         {
             "targetId": null,
@@ -84,7 +84,7 @@
     ],
     "networkMode": null,
     "cpu": "200",
-    "revision": 9,
+    "revision": 1,
     "status": "ACTIVE",
     "inferenceAccelerators": null,
     "proxyConfiguration": null,

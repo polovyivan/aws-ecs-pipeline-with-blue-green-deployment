@@ -5,5 +5,5 @@ Resources:
      Properties:
        TaskDefinition: <TASK_DEFINITION>
        LoadBalancerInfo:
-         ContainerName: ecs-rolling-update-container
+         ContainerName: ecs-blue-green-update-container
          ContainerPort: 8080
