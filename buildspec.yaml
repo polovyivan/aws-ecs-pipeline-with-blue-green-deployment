@@ -6,7 +6,7 @@ env:
   variables:
     AWS_REGION: us-east-1 # checkfor specific region
     AWS_ACCOUNT_ID: 708995052028
-    IMAGE_NAME: aws-pipeline-web-app
+    IMAGE_NAME: ecs-rolling-update-container
     
 phases:
   install:
@@ -55,18 +55,3 @@ artifacts:
     ImageArtifact:
       files:
         - imageDetail.json
-
-      # printf "Are you sure you want $var lrus: "
-      # - printf '[{"name":"aws-pipeline-web-app","imageUri":"708995052028.dkr.ecr.us-east-1.amazonaws.com/aws-pipeline-web-app:latest"}]' > imagedefinitions.json
-# Include only the files required for your application to run.
-# Do not use recursively include artifacts from node_modules directory as it will include unnecessary packages 
-# used only for building and testing.
-# ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
-# artifacts:
-#   files:
-#     # - imagedefinitions.json
-#     - imageDetail.json
-#     # - app.js
-#     # - package.json
-#     # - node_modules/async/*
-#     # - node_modules/lodash/*
